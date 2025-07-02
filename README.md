@@ -23,3 +23,4 @@ Livsmedels-e-handelsprojekt som zzc har outsourcat till mig
    * Allergiråd  
    Om arbetsgivaren inte tillhandahåller uppgifterna får motsvarande beskrivning hämtas och kopieras från webben (noggrannhet kan inte garanteras).  
 6. Det är oklart om **automatisk översättning** mellan engelska och svenska behövs. Om så är fallet måste arbetsgivaren installera ett översättnings-plugin. Manuell översättning kan inte garantera korrekthet eller juridisk giltighet.
+7. webbsidans säkerhet och webbsidans hosting måste jag ta reda på om de vill att jag ska göra något

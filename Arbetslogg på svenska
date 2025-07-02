@@ -1,0 +1,73 @@
+### Dag 5  2025-06-25
+
+1. **Plan att byta Visma-plugin-leverantör**
+   1.1 Eftersom arbetsgivaren saknar konto för den molnbaserade versionen av Visma och i stället använder **Visma Administration 1000 med Visma Integration** (en lokal installation), fungerar WordPress-pluginet inte med deras API. Arbetsgivaren informerade inte i förväg om den exakta Visma-versionen, så vi måste tänka om. Jag har en lösning i åtanke som kan testas.
+   1.2 Den tidigare plugin-leverantören **Wetail** kan inte koppla en lokal Visma-installation direkt till webbplatsen, så vi har begärt återbetalning och överväger leverantörsbyte.
+   1.3 Den nya leverantören är **Spiris** – ett avknoppat dotterbolag från Visma som hanterar onlinedelen och därmed har garanterad kompetens. De erbjuder en “allt-i-ett-lösning”: synkronisera den lokala Visma-installationen till deras molnserver och tillhandahålla ett API till WordPress. Jag föredrar detta framför att riskera meningsskiljaktigheter mellan två olika leverantörer. Kostnaden är högre men inte orimlig.
+   1.4 Enligt deras information kan pluginet även kopplas direkt till vår egen server (osäkert), men då kostar det cirka 850 kr/månad för upp till 1 000 order. Om data först går via deras server och sedan vidare till webbplatsen ligger priset runt 350 kr/månad. Troligen är det enklare för dem när allt passerar deras server.
+
+2. **Plan att skriva kontrakt med arbetsgivaren**
+
+**Problem som uppstod**
+
+* Hittade ingen e-postadress till Spiris tekniska support – var tvungen att mejla deras marknadsavdelning, eftersom detaljer är svåra att förklara per telefon.
+
+---
+
+### Dag 4  2025-06-23
+
+1. Köpte **Visma Plugin by Wetail**
+2. Registrerade Wetail-konto
+3. Följde manualen och löste alla problem fram till inloggningen i Visma (inklusive att auktorisera företagets webbplats så inloggning tillåts)
+4. Använde AI-verktyg för friläggning av produktbilder så bakgrunden blir transparent – ger snyggare resultat på webbplatsen
+
+**Problem som uppstod**
+
+* Chefen måste själv logga in på Visma-kontot
+* AI-friläggning tar 5–8 minuter och har daglig användningsgräns; premiumkonto krävs för obegränsad användning
+* Av ca 1 900 produkter har bara \~500 bilder och endast \~100 kompletta attribut. Att publicera produkter prioriteras nu högre än att skriva fullständiga beskrivningar.
+
+---
+
+### Dag 3  2025-06-21
+
+1. Skrev manuellt beskrivningar för 25 befintliga produkter med fullständig data (≈ 8 minuter per produkt)
+2. Försökte importera produkter automatiskt via CSV – kräver vidare uppföljning
+3. Försökte lägga till produkter med ofullständiga data manuellt (≈ 25 minuter per produkt)
+
+**Problem som uppstod**
+
+* Saknas data kan vi inte fylla i; enbart en frontal bild räcker inte för innehåll, allergener, varumärke, förvaring o.s.v. Även med baksidesbild är det mycket tidskrävande.
+* För produkter med bristfälliga uppgifter måste vi hämta texter från nätet, men eftersom arbetsgivaren kräver juridiskt ansvar kan vi inte garantera deras korrekthet.
+* All produktinformation som publiceras måste senare granskas manuellt – rekommendation: arbetsgivaren själv eller en fackkunnig person.
+* Angiven volym för vätskor tolkas som kg; t.ex. 640 ml matlagningsvin visas som 640 kg.
+
+---
+
+### Dag 2  2025-06-19
+
+1. Försökte lösa flerspråkig kassa för B2B-kunder (engelska användare ska se engelska, inte svenska)
+2. Försökte återställa \~90 raderade konton (troligen bot-registrerade, men Zzc nämnde att några kan vara äkta) och tog därför säkerhetskopia
+
+**Problem som uppstod**
+
+* Registrerade användare får ingen bekräftelse-e-post och blir genast fullvärdiga; måste åtgärdas
+* Företagskod kan fyllas i fritt utan validering, vilket gör att alla kan bli klassade som B2B
+* Överväger automatiserad validering av B2B-kunder via företagskod för att slippa manuellt arbete.
+
+---
+
+### Dag 1  2025-06-17
+
+1. Bytte lösenord
+2. Installerade plugin för att särskilja användartyper
+3. Rensade \~90 testkonton skapade av tidigare utvecklare och nedgraderade deras adminkonto till vanligt konto
+4. Skapade B2B-användargrupp – testning kan börja
+5. Gjorde produkter synliga för gäster och vanliga användare: **WooCommerce → Settings → Site visibility → Coming soon** ändrades till **live**
+6. B2B-test: lade till en falsk “offert”-betalningsgateway i `functions.php`; tar ingen betalning men markerar ordern som lyckad
+
+**Problem som uppstod**
+
+* Icke-admin-användare kunde inte se produkter – löst
+* Webbplatskrasch efter temauppdatering – återställd
+* Version 1.0 av B2B-blockering av betalningsmetoder misslyckades; webbplatsen klagade på “ogiltig betalningsmetod” och ordern gick inte igenom

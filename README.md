@@ -1,12 +1,25 @@
 # wordpress-site
-zzc外包给我的食品购物网站
+Livsmedels-e-handelsprojekt som zzc har outsourcat till mig
 
-# 要求:
+## Krav
 
-1. b2c的付款方式
-2. 内置visma同步订单
-3. b2b用户网站购物结算时不付款，把订单发送后台，后续人工联系进行沟通
-4. 上传商品并且根据雇主送来的内容填写商品属性，包括 : SKU, price, Categories, Weight, Brand, Country, Ingredients, Allergy, Stored
-5. 根据已有信息填写商品的简介，例如 : Introduction , Key Features, Key Benefits, Allergy Advice. 如果雇主没有提供信息则网上找同样的商品简介并且复制过来 （无法保证准确性）
-6. 不知道是否需要英语到瑞典语或者反着来的自动翻译，如果需要则雇主需要安装自动翻译插件，如果我们手动翻译不保证其内容的准确性与法律效应
-
+1. **B2C-betalningsmetod**  
+2. **Inbyggd Visma-synkronisering av order**  
+3. **B2B-kunder** ska inte betala i kassan; ordern skickas till backend för manuell uppföljning.  
+4. **Ladda upp produkter** och fyll i attribut utifrån arbetsgivarens underlag, inklusive:  
+   * SKU  
+   * Pris  
+   * Kategorier  
+   * Vikt  
+   * Varumärke  
+   * Ursprungsland  
+   * Ingredienser  
+   * Allergener  
+   * Förvaring  
+5. **Produktbeskrivningar** ska, utifrån tillgänglig information, omfatta t.ex.:  
+   * Introduktion  
+   * Nyckelfunktioner  
+   * Fördelar  
+   * Allergiråd  
+   Om arbetsgivaren inte tillhandahåller uppgifterna får motsvarande beskrivning hämtas och kopieras från webben (noggrannhet kan inte garanteras).  
+6. Det är oklart om **automatisk översättning** mellan engelska och svenska behövs. Om så är fallet måste arbetsgivaren installera ett översättnings-plugin. Manuell översättning kan inte garantera korrekthet eller juridisk giltighet.

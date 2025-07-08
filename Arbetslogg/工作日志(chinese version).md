@@ -1,3 +1,29 @@
+第九日 2025/07/07
+1. automatiseramera回复了一下插件到底是怎么运作的
+   - Order skapas i Woo
+   - Kopplingen synkar order till Visma
+   - Kopplingen söker på kundnamn i ordern i Visma för att se om kunden existerar
+       Om det inte är en 100% match på kundnamns skapar kopplingen kunden i Visma
+     Det finns alltså ingen "länk" mellan kunder i Visma och Woo förutom kundnamnet
+也就是说插件链接并不会同步用户网站与visma，用户下单时网站会把订单发送到visma，网站搜索这个用户名存不存在visma里(差一个字都不行)，不存在就自动建造一个新的用户。
+如果用户下单时改了名字，这种情况下会在visma里自动生成一个新用户，例如xyc下单时写了xyc1，那visma里就会新加一个xyc1用户，不会添加到旧用户xyc名下。
+客服回复的解决方法:
+Enda sättet att frångå detta är att i meta fältet i Woo ge kunden ett unikt ID som kopplingen också ger kunden i Visma, på så sätt finns det ett unikt "personnummer" för varje kund och rätt kund får rätt order på sig i Visma.
+反正就是进服务器里写个脚本给每个注册用户添加个id数字，这样他名字随便怎么改到最后还是会同步到对应的visma id里，工作量不小，需要跟老板谈。
+
+2. 网站在更新时炸了，商店页面与网站后台全部不能登录，需要联系上一任负责人搞到服务器是租的谁家的，并且登录信息是什么
+3. 上一任负责人回复了，说是one.com他们家的，但是他们不知道服务器的登录账户，不知道真假，但是我已经把网站备份已经下好了，拖时间是没用的。但是拖时间会导致我们这边办不了事，我顶多拖到8月份末尾，再往后没时间搞这个了，到时候工程烂尾就按干了多少来结算吧。
+4. 给one.com发邮件问能不能找回登录信息
+
+
+
+
+
+第八日 2025/07/06
+1. 订购了AI优化图片功能 由于用的是我的账户所以AI公司打了个折 2500kr的服务花了差不多2300左右
+2. 同步visma用户号这个事大概率要在服务器端写脚本，单纯在网站后台写东西不顶用
+
+
 第七日 2025/07/03
 1. 签了合同
 2. 再次确认了雇主对于visma的要求

@@ -4,7 +4,9 @@
    - Kopplingen synkar order till Visma
    - Kopplingen söker på kundnamn i ordern i Visma för att se om kunden existerar
        Om det inte är en 100% match på kundnamns skapar kopplingen kunden i Visma
+
      Det finns alltså ingen "länk" mellan kunder i Visma och Woo förutom kundnamnet
+     
 也就是说插件链接并不会同步用户网站与visma，用户下单时网站会把订单发送到visma，网站搜索这个用户名存不存在visma里(差一个字都不行)，不存在就自动建造一个新的用户。
 如果用户下单时改了名字，这种情况下会在visma里自动生成一个新用户，例如xyc下单时写了xyc1，那visma里就会新加一个xyc1用户，不会添加到旧用户xyc名下。
 客服回复的解决方法:

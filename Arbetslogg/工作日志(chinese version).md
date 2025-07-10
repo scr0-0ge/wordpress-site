@@ -3,6 +3,8 @@
 2. 批量导入插件使用成功 WebToffee Import Export 比内置的好用，但是得自己选每行是什么尤其是attribute方面，Country， brand, allergy 之类的全是attribute
 3. 切记填写时 attribute:pa_country 里选国家才能显示国旗，attribute:country只是新建一个attribute而已，不会链接图片
 4. 切记选attribute时不要选attribute_data，例如attribute_data:Brand 里选品牌是不会显示的
+5. 似乎可以快速上传图片之类的，要搞清楚的话可以速通
+6. 似乎也可以打catagory，但是不清楚怎么搞，得看一下
 
 
 第十一日 2025/07/09

@@ -1,3 +1,10 @@
+第十一天 2025/07/10
+1. 雇主不愿提供大多数的食物数据，让我们自己去找，工作量加大
+2. 批量导入插件使用成功 WebToffee Import Export 比内置的好用，但是得自己选每行是什么尤其是attribute方面，Country， brand, allergy 之类的全是attribute
+3. 切记填写时 attribute:pa_country 里选国家才能显示国旗，attribute:country只是新建一个attribute而已，不会链接图片
+4. 切记选attribute时不要选attribute_data，例如attribute_data:Brand 里选品牌是不会显示的
+
+
 第十一日 2025/07/09
 1. 从老板那边获得了one.com的登陆权限
 2. 救活了网站

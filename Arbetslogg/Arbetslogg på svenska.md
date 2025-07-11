@@ -1,102 +1,176 @@
-# Arbetslogg
-
-## Dag 5 – 2025-06-25
-
-### 1 · Byte av Visma-plugin-leverantör
-#### 1.1 Bakgrund  
-Arbetsgivaren har ingen molnbaserad Visma-licens utan kör **Visma Administration 1000 med Visma Integration** lokalt. WordPress-pluginet stöder inte detta API, vilket gör att vi måste hitta en alternativ lösning.
-
-#### 1.2 Åtgärd  
-Den tidigare leverantören **Wetail** klarar inte lokal koppling → återbetalning begärd.
-
-#### 1.3 Ny leverantör: Spiris  
-Spiris är ett avknoppat bolag från Visma och erbjuder en *“allt-i-ett”*-tjänst:
-- synkronisera lokal **Visma Administration 1000** till deras moln,
-- tillhandahålla API-anslutning till WordPress.
-
-#### 1.4 Kostnadsjämförelse  
-| Scenario | Pris | Kommentar |
-| -------- | ---- | --------- |
-| Direktkoppling vår server → Spiris-plugin | **≈ 850 kr/månad** (upp till 1000 order) | Dyrt; hög etableringsinsats för Spiris. |
-| Synk via Spiris-moln → WordPress | **≈ 350 kr/månad** | Billigare; enklare för Spiris att hantera. |
-
-### 2 · Kontrakt med arbetsgivaren  
-Arbetet med kontraktsskrivning är påbörjat.
-
-<details>
-<summary><strong>Problem (klicka för att visa)</strong></summary>
-
-* Hittar ingen support-e-post till Spiris → mejl skickat till deras marknadsavdelning.
-</details>
+# Projektlogg (optimerad)
+> Tidsperiod: 2025-06-17 → 2025-07-11  
 
 ---
 
-## Dag 4 – 2025-06-23
+## 2025-07-11  ✅
 
-### Utfört
-1. Köpte **Visma Plugin by Wetail**  
-2. Skapade Wetail-konto  
-3. Följde manualen fram till Visma-inloggning  
-4. AI-frilade produktbilder → transparent bakgrund
+### Framsteg
+- **Massuppladdning av produktbilder**  
+  1. Sätt bilderna i Google Drive till “Alla med länken” och kopiera delningslänken  
+     `https://drive.google.com/file/d/…/view?usp=drive_link`  
+  2. Ändra länken till nedladdningsformat  
+     `https://drive.google.com/uc?export=download&id=…`  
+  3. Åtgärdar problemet att bilder inte följer med CSV-importen  
+- **Massändra Product Categories**  
+  - Produktlista → **Bulk actions › Edit**, markera varor och klicka **Apply**  
+- **Skript för automatisk länkändring testat med lyckat resultat**  
+  - Se repo <https://github.com/scr0-0ge/wordpress-site/blob/main/plugin/%E6%89%B9%E9%87%8F%E7%BB%99%E6%9B%B4%E6%94%B9%E9%93%BE%E6%8E%A5%20excel>
 
-<details>
-<summary><strong>Problem</strong></summary>
+### Problem / Lösning
+- **HEIF-uppladdning (iPhone-skärmavbilder) krånglar**  
+  1. Fortsätt använda nedladdningslänk  
+  2. Hämta miniatyr → konvertera till JPG → spara i min privata Drive  
+  3. Dela igen och generera ny nedladdningslänk  
+- Repo version 3.0: <https://github.com/scr0-0ge/wordpress-site/blob/main/plugin/%E6%89%B9%E9%87%8F%E7%BB%99%E6%9B%B4%E6%94%B9%E9%93%BE%E6%8E%A5%20excel>
 
-* Chefen måste själv logga in på Visma-kontot.  
-* AI-friläggning tar 5–8 min/bild och har dagskvot → kräver premium.  
-* Av ~1900 produkter har bara ~500 bilder och ~100 kompletta attribut; publicering prioriteras över fullständiga beskrivningar.
-</details>
+### Okända problem
+Ett test misslyckades med JPG-konverteringen; originall HEIF i Drive blev en felaktig 4-bitars-fil (ska vara ≈2 MB). Troligen p.g.a. skriv­behörighet. Har nu satt filerna till “läsa endast”. Ladda inte upp för många original samtidigt – om de korruptas finns ingen backup.
 
----
-
-## Dag 3 – 2025-06-21
-
-### Utfört
-- Skrev beskrivningar för 25 produkter (≈ 8 min/st).  
-- Testade CSV-import av produkter (fortsatt uppföljning).  
-- Försökte lägga till produkter med ofullständig data manuellt (≈ 25 min/st).
-
-<details>
-<summary><strong>Problem</strong></summary>
-
-1. Endast frontbild → saknas innehåll, allergener, varumärke, förvaring m.m.  
-2. Kopiera texter online medför juridiskt ansvar → osäkerhet.  
-3. All publicerad info kräver manuell kvalitetskontroll.  
-4. Volym för vätskor tolkas som kg (ex. 640 ml → 640 kg).
-</details>
+### Mall för massuppladdning
+Två mallar finns; den gamla kan inte tas bort. Den nya heter **add new only** – lägger endast till nya produkter och ändrar inga befintliga, vilket är tryggare.
 
 ---
 
-## Dag 2 – 2025-06-19
+## 2025-07-10  ✅
 
-### Utfört
-- Fixade flerspråkig kassa (B2B, engelska).  
-- Säkerhetskopierade ~90 raderade konton (möjligen bottar).
+### Framsteg
+- **WebToffee Import / Export** massimport fungerar bättre än Woo-inbyggda  
+  - Varje kolumn måste mappas, särskilt `attribute:*`  
+- **Attributtips**  
+  - `attribute:pa_country` ➡︎ visar landsflagga  
+  - Undvik `attribute_data:*` (renderas ej)  
+- Har bekräftat att bilder och kategorier också kan importeras i bulk (process finslipas)
 
-<details>
-<summary><strong>Problem</strong></summary>
-
-* Ingen bekräftelse-e-post vid registrering → användare blir aktiva direkt.  
-* Företagskod kan fyllas i fritt → alla blir B2B.  
-* Överväger automatisk verifiering av B2B via företagskod.
-</details>
+### Risk
+- Arbetsgivaren ger inte de flesta livsmedelsdata → vi måste researcha själva → mycket mer arbete  
 
 ---
 
-## Dag 1 – 2025-06-17
+## 2025-07-09  ✅
 
-### Utfört
-1. Bytte lösenord.  
-2. Installerade plugin för användarsegmentering.  
-3. Rensade ~90 testkonton, nedgraderade gammalt adminkonto.  
-4. Skapade B2B-grupp; testning påbörjad.  
-5. Gjorde produkter synliga för besökare (**WooCommerce → Settings → Site visibility → Live**).  
-6. Implementerade falsk “offert”-betalningsgateway i `functions.php` för B2B-test.
+### Framsteg
+- one.com-inlogg erhållen; testmiljön återställd och plugins uppdaterade  
+- Prod-sajt: Elementor varnar men fungerar; bildverktyg i Elementor kan användas för optimering
 
-<details>
-<summary><strong>Problem</strong></summary>
+### Att göra
+- **WPML** saknar licens → ingen uppdatering / tvåspråk → chef måste lösa  
+- Visma-betal­koppling felsöks i morgon  
 
-* Icke-admin-användare såg inte produkter → löst.  
-* Temauppdatering kraschade sajten → återställd.  
-* Första versionen av B2B-betalningsblockering misslyckades → “ogiltig betalningsmetod”.
-</details>
+---
+
+## 2025-07-08  ⚠️
+
+### Framsteg
+- one.com bekräftar att felet troligen beror på barntema; kräver serverfix  
+- Del av produktbilder sorterade
+
+### Hinder
+- Server­inloggning saknas från förra ansvarig; drar det ut → kontrakts­uppsägning & avräkning kan bli aktuellt  
+
+---
+
+## 2025-07-07  ⚠️
+
+### Visma-synklogik
+1. Order skapas i WooCommerce  
+2. Synkas till Visma  
+3. Endast 100 % namnmatch arkiveras, annars skapas ny kund  
+4. Rekommenderat: skriv unikt **kund-ID** i Woo-fältet `meta` för säker matchning
+
+### Akut
+- Efter uppdatering kraschar både front- och backend; inlogg blockeras  
+- one.com kontaktad för återställning  
+
+---
+
+## 2025-07-06  ✅
+
+### Framsteg
+- Köpt AI-bildoptimering: 2 500 kr → rabatt ~ 2 300 kr
+
+### Teknik
+- Synk av Visma-ID kräver sannolikt server­skript  
+
+---
+
+## 2025-07-03  ✅
+
+### Avtal & krav
+- Kontrakt signerat med uppdragsgivaren  
+- **Visma-krav**  
+  - Behåll lokal Visma Administration 1000  
+  - Synka order + kunder via automatiseramera-pluginet  
+- **Produkter**: 855 st, sv/eng → ~ 1 710 SKU → ladda upp asap  
+- Rensning av skräpkonton godkänd; juridiskt ansvar klargjort
+
+### Risk
+- Måste bekräfta om Visma kan synka SKU / pris / allergier etc.  
+- Dataflöde bör vara **Visma → webb** för att undvika bortfall  
+
+---
+
+## 2025-07-02  ✅
+
+### Kommunikation
+- Möte med **Spiris** + **automatiseramera**: lokal Visma-direktkoppling möjlig  
+- Kontrakt signeras i morgon
+
+---
+
+## 2025-06-25  ✅
+
+### Planändring
+- Återbetalning Wetail → byter till **Spiris** (”one-stop-shop”)  
+- Kostnads­uppskattning:  
+  - Lokal direktkoppling 1 000 order/mån ≈ 850 kr  
+  - Server-relay ≈ 350 kr  
+
+---
+
+## 2025-06-23  ✅
+
+### Framsteg
+- Köpt och konfigurerat Wetail-Visma-plugin (väntar på chefs-inlogg till Visma)  
+- AI-friläggning ger transparent bakgrund
+
+### Begränsningar
+- AI-friläggning har begränsat antal; uppgradera konto  
+- 1 900 artiklar → bara ~ 500 bilder, ~ 100 kompletta attribut; produkttexter pausas  
+
+---
+
+## 2025-06-21  ✅
+
+### Databearbetning
+- Hand­skriven beskrivning för 25 kompletta produkter (≈ 8 min/st)  
+- CSV-import & manuell komplettering av saknade data (≈ 25 min/st)
+
+### Obs
+- Brist­fälliga data innebär juridiskt ansvar → kräver kund­granskning  
+- Woo standardvolym är **kg**; t.ex. 640 ml tolkas som 640 kg → måste korrigeras  
+
+---
+
+## 2025-06-19  ✅
+
+### Användar­hantering
+- Fixat B2B-kassan för flera språk  
+- Säkerhetskopierat & tagit bort misstänkta bot-konton
+
+### Att lösa
+- Bekräftelsemejl skickas ej; företagskod kan anges fritt → bör automatiskt verifieras  
+
+---
+
+## 2025-06-17  ✅
+
+### Första dag – resultat
+- Återställde lösenord, installerade plugin för användar­grupper, rensade testkonton  
+- Skapade B2B-grupp; öppnade produkter (**WooCommerce › Settings › Site visibility › Live**)  
+- “Förfrågan”-låtsas-betal­gateway för B2B testad med lyckat resultat
+
+### Historiska problem
+- Ej admin såg inte produkter (åtgärdat)  
+- Temauppdatering kraschade sajten (återställd)  
+- B2B-betalblock v1.0 misslyckades; behöver förbättras

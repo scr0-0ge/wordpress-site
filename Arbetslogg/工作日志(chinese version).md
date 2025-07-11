@@ -1,3 +1,23 @@
+第十二天 2025/07/11
+1. 成功批量上传产品图片
+首先drive里把图片选择成所有人可见然后分享链接，例如
+https://drive.google.com/file/d/1Cyn_EQn8Ey-LvIFqC5_S7tmhWmJR6J8E/view?usp=drive_link
+然后把他改成
+https://drive.google.com/uc?export=download&id=1Cyn_EQn8Ey-LvIFqC5_S7tmhWmJR6J8E
+就可以解决图片无法随着csv文件一起上传的问题
+
+2. 成功批量添加类型
+所有产品页面的左上角 bulk action 选成edit，选了物品后点击apply 就可以批量选择 Product categories
+
+3. 探索全自动改链接的方法
+
+
+
+
+
+
+
+
 第十一天 2025/07/10
 1. 雇主不愿提供大多数的食物数据，让我们自己去找，工作量加大
 2. 批量导入插件使用成功 WebToffee Import Export 比内置的好用，但是得自己选每行是什么尤其是attribute方面，Country， brand, allergy 之类的全是attribute

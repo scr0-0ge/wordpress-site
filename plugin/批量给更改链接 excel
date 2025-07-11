@@ -1,0 +1,66 @@
+/**
+ * 批量把 `/file/d/.../view` 链接改成
+ * `https://drive.google.com/uc?export=download&id=...`
+ * 并统一图片字段列名为 "Images/Gallery"
+ * — 适用于多工作表，保留原格式与分隔符（| 或 ,）
+ * @author  chen 2025-07-11
+ */
+
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('批量图片链接')
+    .addItem('转换当前工作簿', 'convertImages')
+    .addToUi();
+}
+
+function convertImages() {
+  const ui = SpreadsheetApp.getUi();
+  const ss = SpreadsheetApp.getActive();
+  const sheets = [ss.getActiveSheet()]; // ← 只取当前活动工作表
+  const reId = /drive\.google\.com\/file\/d\/([^\/\?]+)/; // 提取文件 ID
+  const imgKeys = ['images/gallery', 'images', 'image', 'gallery', 'bild'];
+
+  sheets.forEach(sheet => {
+    const range = sheet.getDataRange();
+    const values = range.getValues();
+    if (values.length < 2) return;                 // 空表跳过
+
+    // 找出图片列索引，并把列名统一成 "Images/Gallery"
+    const headers = values[0].map(h => String(h).trim());
+    const imgCols = [];
+    headers.forEach((h, i) => {
+      const key = h.toLowerCase();
+      if (imgKeys.some(k => key.includes(k))) {
+        imgCols.push(i);
+        if (h !== 'Images/Gallery') headers[i] = 'Images/Gallery';
+      }
+    });
+    if (imgCols.length === 0) return;              // 没找到图片列跳过
+
+    // 扫描数据行，把链接转换
+    for (let r = 1; r < values.length; r++) {
+      imgCols.forEach(c => {
+        const cell = values[r][c];
+        if (typeof cell !== 'string' || !cell.includes('/file/d/')) return;
+
+        // 保留分隔符 | 或 ,
+        const parts = cell.split(/([|,])/);
+        for (let p = 0; p < parts.length; p++) {
+          if (parts[p] === '|' || parts[p] === ',') continue;
+          const m = parts[p].match(reId);
+          if (m) {
+            parts[p] =
+              `https://drive.google.com/uc?export=download&id=${m[1]}`;
+          }
+        }
+        values[r][c] = parts.join('');
+      });
+    }
+
+    // 回写修改后的数据和统一后的表头
+    values[0] = headers;
+    range.setValues(values);
+  });
+
+  ui.alert('图片链接转换完成！');
+}

@@ -12,8 +12,8 @@ https://drive.google.com/uc?export=download&id=1Cyn_EQn8Ey-LvIFqC5_S7tmhWmJR6J8E
 3. 探索全自动改链接的方法 并且成功实验 https://github.com/scr0-0ge/wordpress-site/blob/main/plugin/%E6%89%B9%E9%87%8F%E7%BB%99%E6%9B%B4%E6%94%B9%E9%93%BE%E6%8E%A5%20excel
 
 4. heif 也就是苹果手机截图的格式上传后会有问题，解决方法是 
- 1. 把链接转换为下载格式
- 2. 读取预览图
+  1. 把链接转换为下载格式
+  2. 读取预览图
  3. jpg截图并且存到我的drive里
  4. 把我的drive里的文件分享
  5. 把分享链接更改为下载链接

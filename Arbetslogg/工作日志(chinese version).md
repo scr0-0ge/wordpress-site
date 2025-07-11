@@ -9,7 +9,7 @@ https://drive.google.com/uc?export=download&id=1Cyn_EQn8Ey-LvIFqC5_S7tmhWmJR6J8E
 2. 成功批量添加类型
 所有产品页面的左上角 bulk action 选成edit，选了物品后点击apply 就可以批量选择 Product categories
 
-3. 探索全自动改链接的方法
+3. 探索全自动改链接的方法 并且成功实验 https://github.com/scr0-0ge/wordpress-site/blob/main/plugin/%E6%89%B9%E9%87%8F%E7%BB%99%E6%9B%B4%E6%94%B9%E9%93%BE%E6%8E%A5%20excel
 
 
 

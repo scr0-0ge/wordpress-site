@@ -1,66 +1,98 @@
 /**
- * 批量把 `/file/d/.../view` 链接改成
- * `https://drive.google.com/uc?export=download&id=...`
- * 并统一图片字段列名为 "Images/Gallery"
- * — 适用于多工作表，保留原格式与分隔符（| 或 ,）
- * @author  chen 2025-07-11
+ * Images Helper  v3.0  (2025-07-11)
+ * ───────────────────────────────
+ * • 扫描当前工作表 “图片列”
+ *   ─ 若链接指向 HEIC/HEIF：
+ *      1) 取 Drive thumbnail (JPG) 作为大图
+ *      2) 保存到指定文件夹，文件名 = 原名.jpg
+ *      3) 设为「任何知道连结的人可查看」
+ *      4) 把单元格链接改成新的 JPG 直链
+ * • 同时把 /file/d/.../view 链接改成 uc?... 直链
  */
+
+const DEST_FOLDER_ID = '1n2jg7BWqfQbkEYkkEUYUSl4o3jBXsjCp'; // ← 改成目标文件夹 ID
 
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('批量图片链接')
-    .addItem('转换当前工作簿', 'convertImages')
+    .createMenu('图片助手')
+    .addItem('生成直链 + HEIC→新 JPG', 'fixLinksAndCopyHeic')
     .addToUi();
 }
 
-function convertImages() {
-  const ui = SpreadsheetApp.getUi();
-  const ss = SpreadsheetApp.getActive();
-  const sheets = [ss.getActiveSheet()]; // ← 只取当前活动工作表
-  const reId = /drive\.google\.com\/file\/d\/([^\/\?]+)/; // 提取文件 ID
-  const imgKeys = ['images/gallery', 'images', 'image', 'gallery', 'bild'];
+function fixLinksAndCopyHeic() {
+  const ui     = SpreadsheetApp.getUi();
+  const sheet  = SpreadsheetApp.getActiveSheet();
+  const data   = sheet.getDataRange().getValues();
+  if (data.length < 2) return ui.alert('当前工作表没有数据！');
 
-  sheets.forEach(sheet => {
-    const range = sheet.getDataRange();
-    const values = range.getValues();
-    if (values.length < 2) return;                 // 空表跳过
+  /* 找图片列 */
+  const header = data[0].map(h => String(h).trim());
+  const imgCol = header.findIndex(h => /images\/gallery|image|gallery|bild/i.test(h));
+  if (imgCol === -1) return ui.alert('未找到图片列！');
 
-    // 找出图片列索引，并把列名统一成 "Images/Gallery"
-    const headers = values[0].map(h => String(h).trim());
-    const imgCols = [];
-    headers.forEach((h, i) => {
-      const key = h.toLowerCase();
-      if (imgKeys.some(k => key.includes(k))) {
-        imgCols.push(i);
-        if (h !== 'Images/Gallery') headers[i] = 'Images/Gallery';
-      }
-    });
-    if (imgCols.length === 0) return;              // 没找到图片列跳过
+  const idRX   = /(?:\/d\/|id=)([A-Za-z0-9_-]{10,})/;
+  const dest   = DriveApp.getFolderById(DEST_FOLDER_ID);
+  const token  = ScriptApp.getOAuthToken();
 
-    // 扫描数据行，把链接转换
-    for (let r = 1; r < values.length; r++) {
-      imgCols.forEach(c => {
-        const cell = values[r][c];
-        if (typeof cell !== 'string' || !cell.includes('/file/d/')) return;
+  let changedLinks = 0, copied = 0;
+  const errors = [];
 
-        // 保留分隔符 | 或 ,
-        const parts = cell.split(/([|,])/);
-        for (let p = 0; p < parts.length; p++) {
-          if (parts[p] === '|' || parts[p] === ',') continue;
-          const m = parts[p].match(reId);
-          if (m) {
-            parts[p] =
-              `https://drive.google.com/uc?export=download&id=${m[1]}`;
+  for (let r = 1; r < data.length; r++) {
+    const cell = data[r][imgCol];
+    if (typeof cell !== 'string') continue;
+
+    const parts = cell.split(/([|,])/);          // 保留 | 或 , 分隔符
+
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i] === '|' || parts[i] === ',') continue;
+
+      const m = parts[i].match(idRX);
+      if (!m) continue;
+      const fileId = m[1];
+
+      try {
+        const file = DriveApp.getFileById(fileId);
+        const mime = file.getMimeType();
+
+        /* 若是 HEIC/HEIF → 生成新 JPG */
+        if (/image\/hei[cf]/i.test(mime)) {
+          const nameBase = file.getName().replace(/\.(hei[cf])$/i, '');
+          const thumbUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w4000`;
+
+          const jpgBlob = UrlFetchApp.fetch(thumbUrl, {
+            headers: {Authorization: `Bearer ${token}`}
+          }).getBlob()
+           .setContentType('image/jpeg')
+           .setName(nameBase + '.jpg');
+
+          const newFile   = dest.createFile(jpgBlob);
+          newFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+          const newId     = newFile.getId();
+          parts[i]        = `https://drive.google.com/uc?export=download&id=${newId}`;
+          copied++;
+        }
+        else {
+          /* 非 HEIC，仅把 preview 链接转 uc 直链 */
+          if (!/^https:\/\/drive\.google\.com\/uc\?/.test(parts[i])) {
+            parts[i] = `https://drive.google.com/uc?export=download&id=${fileId}`;
           }
         }
-        values[r][c] = parts.join('');
-      });
+        changedLinks++;
+
+      } catch (err) {
+        errors.push(`第 ${r + 1} 行（ID=${fileId}）：${err.message}`);
+      }
     }
+    data[r][imgCol] = parts.join('');
+  }
 
-    // 回写修改后的数据和统一后的表头
-    values[0] = headers;
-    range.setValues(values);
-  });
+  sheet.getDataRange().setValues(data);
 
-  ui.alert('图片链接转换完成！');
+  /* 弹窗结果 —— 最多显示 20 条错误 */
+  const showErr = errors.slice(0, 20).join('\n');
+  ui.alert(
+    `完成！\n链接处理：${changedLinks} 条\nHEIC 生成新 JPG：${copied} 张` +
+    (errors.length ? `\n\n⚠ 错误 ${errors.length} 条：\n${showErr}` : '')
+  );
 }

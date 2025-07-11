@@ -22,7 +22,7 @@
   1. 仍使用下载链接格式  
   2. 读取预览图 → 截为 JPG → 存入 Drive  
   3. 再分享并生成下载链接  
-
+- 参考仓库3.0版本 <https://github.com/scr0-0ge/wordpress-site/blob/main/plugin/%E6%89%B9%E9%87%8F%E7%BB%99%E6%9B%B4%E6%94%B9%E9%93%BE%E6%8E%A5%20excel>
 ---
 
 ## 2025-07-10  ✅

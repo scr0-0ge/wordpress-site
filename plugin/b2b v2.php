@@ -1,18 +1,18 @@
 <?php
 /**
- * B2B Offertbetalningsgateway för WooCommerce (med språksupport)
- * Description: 提供一个询价支付方式，B2B 客户下单不在线付款，并自动设置订单为 processing 状态
+ * B2B Offertbetalningsgateway för WooCommerce med Express Checkout-skydd
  * Beskrivning: Erbjuder ett betalningsalternativ för offertförfrågan som låter B2B-kunder
  * lägga order utan direkt betalning och automatiskt sätta orderstatus till processing
- * för Visma-synkronisering.
+ * för Visma-synkronisering. Dölj även Apple Pay/Google Pay för B2B-roller.
  * Version:     1.0
  * Author:      Xingyi Chen
  * Text-domain: b2b-offert
  */
 
-// Helper: returnera text beroende på språk (WPML 或 get_locale)
+/**
+ * Hjälpfunktion: Returnera text baserat på språk (WPML eller locale)
+ */
 function b2b_offert_get_text( $svenska, $english ) {
-    // WPML 常用常量，回退到 get_locale()
     if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
         $lang = ICL_LANGUAGE_CODE;
     } else {
@@ -23,42 +23,48 @@ function b2b_offert_get_text( $svenska, $english ) {
         : $svenska;
 }
 
-// 1. Registrera egen gateway
+/**
+ * 1. Registrera den egna gatewayen
+ */
 add_filter( 'woocommerce_payment_gateways', 'register_b2b_offert_gateway' );
 function register_b2b_offert_gateway( $gateways ) {
     $gateways[] = 'WC_Gateway_B2B_Offert';
     return $gateways;
 }
 
-// 2. Definiera gateway-klassen
+/**
+ * 2. Definiera gateway-klassen WC_Gateway_B2B_Offert
+ */
 class WC_Gateway_B2B_Offert extends WC_Payment_Gateway {
-    public function __construct() {
-        $this->id               = 'b2b_offert';
-        // 管理后台 & 用户前端根据语言显示
-        $this->method_title     = b2b_offert_get_text( 'Skicka offertförfrågan', 'Submit quote request' );
-        $this->has_fields       = false;
 
-        // Initiera inställningar
+    public function __construct() {
+        $this->id                 = 'b2b_offert';
+        $this->method_title       = b2b_offert_get_text( 'Skicka offertförfrågan', 'Submit quote request' );
+        $this->has_fields         = false;
+
+        // Initiera admininställningar
         $this->init_form_fields();
         $this->init_settings();
 
-        // Titel och beskrivning som visas för slutkund
-        $this->title            = $this->get_option( 'title',
+        // Titel och beskrivning som visas på kassa-sidan
+        $this->title              = $this->get_option( 'title',
             b2b_offert_get_text( 'Skicka offertförfrågan', 'Submit quote request' )
         );
-        $this->description      = $this->get_option( 'description',
+        $this->description        = $this->get_option( 'description',
             b2b_offert_get_text(
                 'Efter att du skickat förfrågan kommer vi kontakta dig för prisbekräftelse så snart som möjligt.',
                 "After you submit a request, we'll contact you to confirm pricing shortly."
             )
         );
-        $this->enabled          = $this->get_option( 'enabled', 'yes' );
+        $this->enabled            = $this->get_option( 'enabled', 'yes' );
 
-        // Spara admin-inställningar
+        // Spara inställningar i admin
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, [ $this, 'process_admin_options' ] );
     }
 
-    // Formulärfält i admininställningar
+    /**
+     * 2.1 Formulärfält i admininställningar
+     */
     public function init_form_fields() {
         $this->form_fields = [
             'enabled'     => [
@@ -86,14 +92,16 @@ class WC_Gateway_B2B_Offert extends WC_Payment_Gateway {
         ];
     }
 
-    // Hantera ordern vid checkout
+    /**
+     * 2.2 Hantera ordern vid checkout
+     */
     public function process_payment( $order_id ) {
         $order = wc_get_order( $order_id );
-        // Markera som betald (virtually)
+        // Markera som betald (virtuellt)
         $order->payment_complete();
         // Minska lagersaldo
         wc_reduce_stock_levels( $order_id );
-        // Returnera framgång och omdirigera till tack-sida
+        // Returnera resultat och omdirigera till tack-sida
         return [
             'result'   => 'success',
             'redirect' => $this->get_return_url( $order ),
@@ -101,22 +109,28 @@ class WC_Gateway_B2B_Offert extends WC_Payment_Gateway {
     }
 }
 
-// 3. Visa endast gateway för B2B-kunder, dölj för andra
-add_filter( 'woocommerce_available_payment_gateways', 'filter_b2b_offert_gateway' );
+/**
+ * 3. Endast B2B-kunder ser offert-gatewayen, andra döljs
+ */
+add_filter( 'woocommerce_available_payment_gateways', 'filter_b2b_offert_gateway', 100 );
 function filter_b2b_offert_gateway( $gateways ) {
     if ( current_user_can( 'b2b_customer' ) ) {
-        return isset( $gateways['b2b_offert'] )
-            ? [ 'b2b_offert' => $gateways['b2b_offert'] ]
-            : [];
+        foreach ( $gateways as $id => $gateway ) {
+            if ( 'b2b_offert' !== $id ) {
+                unset( $gateways[ $id ] );
+            }
+        }
+        return $gateways;
     }
-    // 非 B2B 用户移除
     if ( isset( $gateways['b2b_offert'] ) ) {
         unset( $gateways['b2b_offert'] );
     }
     return $gateways;
 }
 
-// 4. Sätt B2B-orderstatus till processing för Visma-synkronisering
+/**
+ * 4. Sätt B2B-orderstatus till processing för Visma-synkronisering
+ */
 add_action( 'woocommerce_checkout_order_processed', 'set_b2b_order_processing_status', 10, 3 );
 function set_b2b_order_processing_status( $order_id, $posted_data, $order ) {
     if ( current_user_can( 'b2b_customer' ) ) {
@@ -129,3 +143,24 @@ function set_b2b_order_processing_status( $order_id, $posted_data, $order ) {
         );
     }
 }
+
+/**
+ * 5. Dölj Express Checkouts (Apple Pay/Google Pay) för B2B-kunder via inline CSS
+ */
+add_action( 'wp_head', 'b2b_offert_remove_express_checkouts_css', 1 );
+function b2b_offert_remove_express_checkouts_css() {
+    if ( ! current_user_can( 'b2b_customer' ) ) {
+        return;
+    }
+    echo '<style>
+        /* Dölj Stripe Payment Request API-knappar */
+        #wc-stripe-payment-request-wrapper,
+        .wc-stripe-payment-request-button,
+        /* Dölj WooPayments Block Express Checkouts */
+        .wc-block-checkout-payment-request-wrapper,
+        .wc-block-components-checkout-payment-request {
+            display: none !important;
+        }
+    </style>';
+}
+

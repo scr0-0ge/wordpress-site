@@ -8,7 +8,7 @@
 * **Visma-supporten har gått med på att sätta upp integrationen innan webbplatsen är färdig**
 
   1. Kontaktpersonen på företaget sa att han vill få igång länken så snart som möjligt så att man kan testa ordersynkningen, så jag mejlade Visma-supporten i går och bad dem starta integreringen omgående, även om webbplatsen inte är helt färdig – vi betalar dem hellre för eventuella problem i efterhand. I dag svarade de att det går bra att börja. Bokad tid är nästa onsdag eller torsdag.
-  2. Kontaktpersonen har hamnat i konflikt med ägaren och har redan sagt upp sig, och ägaren verkar nu vara onåbar. Börjar förbereda för hans avgång.
+  2. Kontaktpersonen har hamnat i konflikt med ägaren och har redan sagt upp sig. Börjar förbereda för min avgång också.
 
 * **Raderat produkter med risk för upphovsrättsproblem**
 

@@ -1,5 +1,67 @@
 # Projektlogg (optimerad)
-> Tidsperiod: 2025-06-17 → 2025-07-11  
+> Tidsperiod: 2025-06-17 → 2025-07-20
+
+## 2025-07-18  ✅
+
+### Framsteg
+
+* **Visma-supporten har gått med på att sätta upp integrationen innan webbplatsen är färdig**
+
+  1. Kontaktpersonen på företaget sa att han vill få igång länken så snart som möjligt så att man kan testa ordersynkningen, så jag mejlade Visma-supporten i går och bad dem starta integreringen omgående, även om webbplatsen inte är helt färdig – vi betalar dem hellre för eventuella problem i efterhand. I dag svarade de att det går bra att börja. Bokad tid är nästa onsdag eller torsdag.
+  2. Kontaktpersonen har hamnat i konflikt med ägaren och har redan sagt upp sig, och ägaren verkar nu vara onåbar. Börjar förbereda för hans avgång.
+
+* **Raderat produkter med risk för upphovsrättsproblem**
+
+  1. Eftersom chefen inte längre vill plagiera bilder tog jag bort alla produkter vars bilder hade kopierats från andra webbplatser.
+
+---
+
+## 2025-07-17  ✅
+
+### Framsteg
+
+* **Godkänd acceptans**
+
+  1. B2B-beställning utan betalning har godkänts.
+  2. B2C-betalning i sandbox-läge har godkänts.
+
+* **WPML installerat och betalt**
+
+  1. Kan börja översätta de engelska sidorna.
+
+* **Uppdragsgivaren säger att bilder inte ska plagieras, men att produktdatatabeller får kopieras från andra webbplatser**
+
+---
+
+## 2025-07-16  ✅
+
+### Framsteg
+
+* **B2B v2-pluginet installerat**
+
+  1. Stöd för flera språk.
+  2. Kan kringgå Apple Pay.
+     `https://github.com/scr0-0ge/wordpress-site/blob/main/plugin/b2b%20v2.php`
+
+### Problem
+
+* **Enligt kontraktet måste vi ändå ladda upp 500 produkter, även om de inte tillhandahåller produktdata**
+
+  1. Som sagt måste jag själv hitta material – minst 180 produkter.
+  2. Det känns som en fälla; om det inte går får vi dra oss ur enligt kontraktet.
+
+---
+
+## 2025-07-14  ✅
+
+### Framsteg
+
+* **Svar från Visma**
+
+  1. Funktionen Stock management måste vara aktiverad vid uppladdning, eller så kan man mass-redigera i webbshoppen.
+  2. Rekommenderar att vi laddar upp 800 produkter först och synkar därefter – avråder från att koppla ihop systemen när bara hälften av produkterna finns.
+
+* **Attribut tillagda och visas nu även vid massuppladdning**
 
 ---
 

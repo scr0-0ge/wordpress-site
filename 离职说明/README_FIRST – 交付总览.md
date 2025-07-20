@@ -1,6 +1,3 @@
-下面是一份**完整可直接转换为 PDF 的 README\_FIRST 内容**。
-你只需把下列 Markdown／Word 文档保存为 “README\_FIRST.pdf” 即可；格式已按雇主阅览习惯（中–英对照、页脚日期）排好节次。
-
 ---
 
 ## README\_FIRST – 交付总览 / Delivery Overview
@@ -63,9 +60,7 @@
 
 #### 3.4 Visma Sync 前置 checklist
 
-* 购买并激活 **Visma Admin Integrationslicens**
-* 提供 WooCommerce API Key + 10 个会计科目代码
-* 完整步骤见 `Visma‑Precheck.pdf` 第 2‑3 页
+* wordpresstest2025@gmail.com 里查看与客服的联系邮件有写
 
 ---
 

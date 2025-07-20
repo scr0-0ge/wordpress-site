@@ -1,5 +1,3 @@
----
-
 ## README\_FIRST – 交付总览 / Delivery Overview
 
 **项目名称 / Project:** Sinli WordPress B2B & B2C Webshop

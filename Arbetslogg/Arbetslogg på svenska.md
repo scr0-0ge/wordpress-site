@@ -14,6 +14,8 @@
 
   1. Eftersom chefen inte längre vill plagiera bilder tog jag bort alla produkter vars bilder hade kopierats från andra webbplatser.
 
+* arbeta med excel 
+
 ---
 
 ## 2025-07-17  ✅
@@ -43,6 +45,8 @@
   2. Kan kringgå Apple Pay.
      `https://github.com/scr0-0ge/wordpress-site/blob/main/plugin/b2b%20v2.php`
 
+* arbeta med excel
+
 ### Problem
 
 * **Enligt kontraktet måste vi ändå ladda upp 500 produkter, även om de inte tillhandahåller produktdata**
@@ -63,7 +67,7 @@
 
 * **Nya Attribut tillagda och visas nu även vid massuppladdning**
 
-* arbeta med excel *
+* arbeta med excel 
 ---
 
 ## 2025-07-11  ✅
@@ -105,6 +109,8 @@ Två mallar finns; den gamla kan inte tas bort. Den nya heter **add new only** �
   - Undvik `attribute_data:*` (renderas ej)  
 - Har bekräftat att bilder och kategorier också kan importeras i bulk (process finslipas)
 
+* arbeta med excel 
+
 ### Risk
 - Arbetsgivaren ger inte de flesta livsmedelsdata → vi måste researcha själva → mycket mer arbete  
 
@@ -115,6 +121,8 @@ Två mallar finns; den gamla kan inte tas bort. Den nya heter **add new only** �
 ### Framsteg
 - one.com-inlogg erhållen; testmiljön återställd och plugins uppdaterade  
 - Prod-sajt: Elementor varnar men fungerar; bildverktyg i Elementor kan användas för optimering
+
+* arbeta med excel 
 
 ### Att göra
 - **WPML** saknar licens → ingen uppdatering / tvåspråk → chef måste lösa  
@@ -127,6 +135,8 @@ Två mallar finns; den gamla kan inte tas bort. Den nya heter **add new only** �
 ### Framsteg
 - one.com bekräftar att felet troligen beror på barntema; kräver serverfix  
 - Del av produktbilder sorterade
+
+* arbeta med excel 
 
 ### Hinder
 - Server­inloggning saknas från förra ansvarig; drar det ut → kontrakts­uppsägning & avräkning kan bli aktuellt  
@@ -150,7 +160,9 @@ Två mallar finns; den gamla kan inte tas bort. Den nya heter **add new only** �
 ## 2025-07-06  ✅
 
 ### Framsteg
-- Köpt AI-bildoptimering: 2 500 kr → rabatt ~ 2 300 kr
+- Köpt AI-bildoptimering
+
+* arbeta med excel 
 
 ### Teknik
 - Synk av Visma-ID kräver sannolikt server­skript  

@@ -48,7 +48,7 @@
 * **Enligt kontraktet måste vi ändå ladda upp 500 produkter, även om de inte tillhandahåller produktdata**
 
   1. Som sagt måste jag själv hitta material – minst 180 produkter.
-  2. Det känns som en fälla; om det inte går får vi dra oss ur enligt kontraktet.
+  2. Om det inte går får vi dra oss ur enligt kontraktet.
 
 ---
 
@@ -61,8 +61,9 @@
   1. Funktionen Stock management måste vara aktiverad vid uppladdning, eller så kan man mass-redigera i webbshoppen.
   2. Rekommenderar att vi laddar upp 800 produkter först och synkar därefter – avråder från att koppla ihop systemen när bara hälften av produkterna finns.
 
-* **Attribut tillagda och visas nu även vid massuppladdning**
+* **Nya Attribut tillagda och visas nu även vid massuppladdning**
 
+* arbeta med excel *
 ---
 
 ## 2025-07-11  ✅

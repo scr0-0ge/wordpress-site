@@ -1,28 +1,55 @@
 /**
- * Images Helper  v3.0  (2025-07-11)
+ * Images Helper  v3.1  (2025‑07‑23)
  * ───────────────────────────────
- * • 扫描当前工作表 “图片列”
- *   ─ 若链接指向 HEIC/HEIF：
- *      1) 取 Drive thumbnail (JPG) 作为大图
- *      2) 保存到指定文件夹，文件名 = 原名.jpg
- *      3) 设为「任何知道连结的人可查看」
- *      4) 把单元格链接改成新的 JPG 直链
- * • 同时把 /file/d/.../view 链接改成 uc?... 直链
+ * • 默认把 HEIC → JPG 存到「当前用户的 My Drive 根目录」。
+ * • 用户可通过菜单随时设定 / 取消一个自选目标文件夹。
+ * • 其余逻辑与 v3.0 保持一致。
  */
 
-const DEST_FOLDER_ID = '1n2jg7BWqfQbkEYkkEUYUSl4o3jBXsjCp'; // ← 改成目标文件夹 ID
-
+/*────────── ① 菜单 ───────────────────────────────────*/
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('图片助手')
-    .addItem('生成直链 + HEIC→新 JPG', 'fixLinksAndCopyHeic')
+    .addItem('生成直链 + HEIC→JPG', 'fixLinksAndCopyHeic')
+    .addSeparator()
+    .addItem('设置目标文件夹…', 'setDestFolder')
+    .addItem('改回存自己 Drive', 'clearDestFolder')
     .addToUi();
 }
 
+/*────────── ② 读取 / 保存目标文件夹 ───────────────────*/
+function getDestFolder_() {
+  const id = PropertiesService.getUserProperties().getProperty('DEST_FOLDER_ID');
+  if (!id) return DriveApp.getRootFolder();               // 默认：自己的 My Drive 根目录
+  return DriveApp.getFolderById(id);                      // 用户自定义文件夹
+}
+
+function setDestFolder() {
+  const ui  = SpreadsheetApp.getUi();
+  const res = ui.prompt('请输入目标文件夹「链接」或「ID」：');
+  if (res.getSelectedButton() !== ui.Button.OK) return;
+
+  const id = res.getResponseText().trim()
+               .replace(/.*?folders\/([A-Za-z0-9_-]{10,}).*/, '$1'); // 允许整条 URL
+  try {
+    DriveApp.getFolderById(id);                           // 验证可访问
+    PropertiesService.getUserProperties().setProperty('DEST_FOLDER_ID', id);
+    ui.alert('已保存！之后都会写入此文件夹。');
+  } catch (e) {
+    ui.alert('无法读取该文件夹，请检查权限或 ID 是否正确。\n\n' + e.message);
+  }
+}
+
+function clearDestFolder() {
+  PropertiesService.getUserProperties().deleteProperty('DEST_FOLDER_ID');
+  SpreadsheetApp.getUi().alert('已切换为「自己的 My Drive」根目录。');
+}
+
+/*────────── ③ 主函数 ─────────────────────────────────*/
 function fixLinksAndCopyHeic() {
-  const ui     = SpreadsheetApp.getUi();
-  const sheet  = SpreadsheetApp.getActiveSheet();
-  const data   = sheet.getDataRange().getValues();
+  const ui    = SpreadsheetApp.getUi();
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const data  = sheet.getDataRange().getValues();
   if (data.length < 2) return ui.alert('当前工作表没有数据！');
 
   /* 找图片列 */
@@ -30,9 +57,9 @@ function fixLinksAndCopyHeic() {
   const imgCol = header.findIndex(h => /images\/gallery|image|gallery|bild/i.test(h));
   if (imgCol === -1) return ui.alert('未找到图片列！');
 
-  const idRX   = /(?:\/d\/|id=)([A-Za-z0-9_-]{10,})/;
-  const dest   = DriveApp.getFolderById(DEST_FOLDER_ID);
-  const token  = ScriptApp.getOAuthToken();
+  const idRX  = /(?:\/d\/|id=)([A-Za-z0-9_-]{10,})/;
+  const dest  = getDestFolder_();                         // ← 目标文件夹由用户属性决定
+  const token = ScriptApp.getOAuthToken();
 
   let changedLinks = 0, copied = 0;
   const errors = [];
@@ -41,7 +68,7 @@ function fixLinksAndCopyHeic() {
     const cell = data[r][imgCol];
     if (typeof cell !== 'string') continue;
 
-    const parts = cell.split(/([|,])/);          // 保留 | 或 , 分隔符
+    const parts = cell.split(/([|,])/);                   // 保留 | 或 , 分隔符
 
     for (let i = 0; i < parts.length; i++) {
       if (parts[i] === '|' || parts[i] === ',') continue;
@@ -54,29 +81,27 @@ function fixLinksAndCopyHeic() {
         const file = DriveApp.getFileById(fileId);
         const mime = file.getMimeType();
 
-        /* 若是 HEIC/HEIF → 生成新 JPG */
+        /* 若是 HEIC/HEIF → 生成新 JPG */
         if (/image\/hei[cf]/i.test(mime)) {
           const nameBase = file.getName().replace(/\.(hei[cf])$/i, '');
           const thumbUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w4000`;
 
           const jpgBlob = UrlFetchApp.fetch(thumbUrl, {
-            headers: {Authorization: `Bearer ${token}`}
+            headers: { Authorization: `Bearer ${token}` }
           }).getBlob()
-           .setContentType('image/jpeg')
-           .setName(nameBase + '.jpg');
+            .setContentType('image/jpeg')
+            .setName(nameBase + '.jpg');
 
-          const newFile   = dest.createFile(jpgBlob);
+          const newFile = dest.createFile(jpgBlob);
           newFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
-          const newId     = newFile.getId();
-          parts[i]        = `https://drive.google.com/uc?export=download&id=${newId}`;
+          const newId  = newFile.getId();
+          parts[i]     = `https://drive.google.com/uc?export=download&id=${newId}`;
           copied++;
         }
-        else {
-          /* 非 HEIC，仅把 preview 链接转 uc 直链 */
-          if (!/^https:\/\/drive\.google\.com\/uc\?/.test(parts[i])) {
-            parts[i] = `https://drive.google.com/uc?export=download&id=${fileId}`;
-          }
+        /* 非 HEIC，仅把 preview 链接转 uc 直链 */
+        else if (!/^https:\/\/drive\.google\.com\/uc\?/.test(parts[i])) {
+          parts[i] = `https://drive.google.com/uc?export=download&id=${fileId}`;
         }
         changedLinks++;
 
@@ -89,7 +114,7 @@ function fixLinksAndCopyHeic() {
 
   sheet.getDataRange().setValues(data);
 
-  /* 弹窗结果 —— 最多显示 20 条错误 */
+  /* 结果弹窗 */
   const showErr = errors.slice(0, 20).join('\n');
   ui.alert(
     `完成！\n链接处理：${changedLinks} 条\nHEIC 生成新 JPG：${copied} 张` +

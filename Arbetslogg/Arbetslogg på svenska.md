@@ -242,7 +242,7 @@ Två mallar finns; den gamla kan inte tas bort. Den nya heter **add new only** �
 
 ### Första dag – resultat
 - Återställde lösenord, installerade plugin för användar­grupper, rensade testkonton  
-- Skapade B2B-grupp; öppnade produkter (**WooCommerce › Settings › Site visibility › Live**)  
+- Skapade B2B-grupp; öppnade hemsidan  (**WooCommerce › Settings › Site visibility › Live**)  
 - “Förfrågan”-låtsas-betal­gateway för B2B testad med lyckat resultat
 
 ### Historiska problem

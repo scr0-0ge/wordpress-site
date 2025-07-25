@@ -1,4 +1,5 @@
 <?php
+
 /**
  * B2B Offertbetalningsgateway för WooCommerce med Express Checkout-skydd
  * Beskrivning: Erbjuder ett betalningsalternativ för offertförfrågan som låter B2B-kunder

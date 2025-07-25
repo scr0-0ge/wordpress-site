@@ -6,6 +6,12 @@
 ### 进展
 1. 跟新插件时网站炸了，重新回档后重新做Product categories，下面就是步骤
 
+第一步 :appearance 进 widgets， 里面Product categories错位，要拉到 shop page widget area.
+这步后正常显示但是实际点击后页面会显示404
+
+第二步 :woocommece 到 setting再到products, Shop page 改到购物页面，现在只有英文模式有实际的商店页面，所以先绑了Assortment,至此英文页面的Product categories完全能用了
+
+
 
 2.搜索功能就是个样子货只能搜blog，产品搜不了
 后台 → Woodmart ▸ Header Builder

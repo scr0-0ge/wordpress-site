@@ -2,6 +2,20 @@
 > Tidsperiod: 2025-06-17 → 2025-07-20
 
 
+## 2025-07-25  ✅
+### 进展
+1. 跟新插件时网站炸了，重新回档后重新做Product categories，下面就是步骤
+
+
+2.搜索功能就是个样子货只能搜blog，产品搜不了
+后台 → Woodmart ▸ Header Builder
+在 Headers builder 列表里，找到带 黄色星标（⭐ Default header layout）的那一行并且点修改,进去后找到放大镜图标并且点它上方的铅笔按钮。
+Search result里面把AJAX开了，Post type改成product.
+这么改了后其实还是在搜blog模式，但是能搜到产品了，也不美观，但是能用
+
+
+
+
 
 ## 2025-07-24  ✅
 ### 进展

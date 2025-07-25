@@ -11,6 +11,12 @@
 
 第二步 :woocommece 到 setting再到products, Shop page 改到购物页面，现在只有英文模式有实际的商店页面，所以先绑了Assortment,至此英文页面的Product categories完全能用了
 
+第三步 : 瑞典语界面的分类非常麻烦，这一步会很长，处理错误会导致页面出问题
+
+- 首先Product permalinks 里的 几个选项永远要选Shop base，要不然会出Error 503 VCL failed
+- How to translate product permalinks 那个选项打开后跳转到WooCommerce Multilingual & Multicurrency ，点开里面的 status，把WooCommerce Store Pages 里面的瑞典语页面实际做了。
+- 给分类基做“多语言 slug”， 前往 WPML → 设置 → Taxonomies Translation，把Categories (category) 里面的瑞典语写成kategorier， 把Translatable 改成use translation if available or fallback to default language。
+  至此就完事了
 
 
 2.搜索功能就是个样子货只能搜blog，产品搜不了

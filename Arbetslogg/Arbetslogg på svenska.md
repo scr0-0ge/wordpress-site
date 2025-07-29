@@ -1,20 +1,54 @@
-# Projektlogg (optimerad)
-> Tidsperiod: 2025-06-17 → 2025-07-20
+# Projektlogg (Optimerad version)
+
+> Tidsperiod: 2025-06-17 → 2025-07-25
+
+---
+
+## 2025-07-25  ✅
+
+### Framsteg
+
+1. När ett plugin uppdaterades kraschade webbplatsen. Efter återställningen gjorde jag om **Product categories** – steg för steg:
+
+   **Steg 1:** **Appearance → Widgets**. Widgeten **Product categories** låg fel; dra den till **Shop Page Widget Area**. Nu visas den, men klick leder till 404-sida.
+
+   **Steg 2:** **WooCommerce → Settings → Products**. Ändra **Shop page** till butiksidan. Eftersom endast den engelska butiken finns länkade jag den till *Assortment*. Därmed fungerar **Product categories** på engelska.
+
+   **Steg 3 (Svenska kategorier – omständligt):**
+
+   * I **Product permalinks** måste alternativet *Shop base* alltid vara valt – annars fel **503 VCL failed**.
+   * Under **How to translate product permalinks** öppnas *WooCommerce Multilingual & Multicurrency* → fliken **Status**; där skapade jag de svenska butikssidorna i **WooCommerce Store Pages**.
+   * Ge kategoribas en flerspråkig *slug*: **WPML → Settings → Taxonomies Translation**, skriv **kategorier** som svensk slug för *Categories (category)* och sätt *Translatable* till **use translation if available or fallback to default language**. Klart.
+
+2. Sökfunktionen hittade bara blogginlägg.
+
+   * **Backend → Woodmart ▸ Header Builder**
+   * I listan, välj raden med gul stjärna (⭐ *Default header layout*) och klicka **Edit**.
+   * Klicka på förstoringsglas-ikonen → penn-knappen.
+   * I **Search result** slå på **AJAX**, ändra **Post type** till **product**.
+     Sökningen använder fortfarande bloggläge, men hittar nu produkter – inte snyggt, men fungerar.
+
+---
+
+## 2025-07-24  ✅
+
+### Framsteg
+
+1. Slutförde **Product categories** för både engelska och svenska. Tog drygt fyra timmar; blev klar 25 juli kl. 01:30.
+
+---
 
 ## 2025-07-18  ✅
 
 ### Framsteg
 
-* **Visma-supporten har gått med på att sätta upp integrationen innan webbplatsen är färdig**
+* **Visma-supporten gick med på att starta integrationen innan webbplatsen är klar**
 
-  1. Kontaktpersonen på företaget sa att han vill få igång länken så snart som möjligt så att man kan testa ordersynkningen, så jag mejlade Visma-supporten i går och bad dem starta integreringen omgående, även om webbplatsen inte är helt färdig – vi betalar dem hellre för eventuella problem i efterhand. I dag svarade de att det går bra att börja. Bokad tid är nästa onsdag eller torsdag.
-  2. Kontaktpersonen har hamnat i konflikt med ägaren och har redan sagt upp sig. Börjar förbereda för min avgång också.
+  1. Kontaktpersonen ville få länken live snarast för att testa ordersynkningen. I går mejlade jag Visma-supporten om omedelbar start trots ofärdig sida och erbjöd att betala för senare problem. I dag svarade de att det är okej och bokade tid nästa onsdag eller torsdag.
 
-* **Raderat produkter med risk för upphovsrättsproblem**
+* **Borttagning av produkter med upphovsrättsrisk**
 
-  1. Eftersom chefen inte längre vill plagiera bilder tog jag bort alla produkter vars bilder hade kopierats från andra webbplatser.
-
-* arbeta med excel 
+  1. Eftersom chefen inte längre vill använda plagierade bilder tog jag bort alla produkter som använde sådana bilder.
 
 ---
 
@@ -24,14 +58,14 @@
 
 * **Godkänd acceptans**
 
-  1. B2B-beställning utan betalning har godkänts.
-  2. B2C-betalning i sandbox-läge har godkänts.
+  1. B2B-order utan betalning godkänd.
+  2. B2C-betalning i sandbox-läge godkänd.
 
 * **WPML installerat och betalt**
 
-  1. Kan börja översätta de engelska sidorna.
+  1. Översättning av engelska sidor kan påbörjas.
 
-* **Uppdragsgivaren säger att bilder inte ska plagieras, men att produktdatatabeller får kopieras från andra webbplatser**
+* **Uppdragsgivaren:** Bilder får inte plagieras, men produktdatatabeller får kopieras från andra webbplatser.
 
 ---
 

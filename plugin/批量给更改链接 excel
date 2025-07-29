@@ -1,64 +1,64 @@
 /**
  * Images Helper  v3.1  (2025‑07‑23)
- * ───────────────────────────────
- * • 默认把 HEIC → JPG 存到「当前用户的 My Drive 根目录」。
- * • 用户可通过菜单随时设定 / 取消一个自选目标文件夹。
- * • 其余逻辑与 v3.0 保持一致。
+ * ─────────────────────────────────────
+ * • Som standard lagras HEIC → JPG i användarens egen "Min Drive"‑rot.
+ * • Varje användare kan via menyn ange eller ta bort en valfri målmapp.
+ * • Övrig logik är oförändrad jämfört med v3.0.
  */
 
-/*────────── ① 菜单 ───────────────────────────────────*/
+/*────────── ① Meny ───────────────────────────────────*/
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('图片助手')
-    .addItem('生成直链 + HEIC→JPG', 'fixLinksAndCopyHeic')
+    .createMenu('Bildhjälp')
+    .addItem('Skapa direktlänkar + HEIC→JPG', 'fixLinksAndCopyHeic')
     .addSeparator()
-    .addItem('设置目标文件夹…', 'setDestFolder')
-    .addItem('改回存自己 Drive', 'clearDestFolder')
+    .addItem('Välj målmapp…', 'setDestFolder')
+    .addItem('Återställ till Min Drive', 'clearDestFolder')
     .addToUi();
 }
 
-/*────────── ② 读取 / 保存目标文件夹 ───────────────────*/
+/*────────── ② Läs / spara målmapp ───────────────────*/
 function getDestFolder_() {
   const id = PropertiesService.getUserProperties().getProperty('DEST_FOLDER_ID');
-  if (!id) return DriveApp.getRootFolder();               // 默认：自己的 My Drive 根目录
-  return DriveApp.getFolderById(id);                      // 用户自定义文件夹
+  if (!id) return DriveApp.getRootFolder();               // Standard: användarens Drive‑rot
+  return DriveApp.getFolderById(id);                      // Användardefinierad mapp
 }
 
 function setDestFolder() {
   const ui  = SpreadsheetApp.getUi();
-  const res = ui.prompt('请输入目标文件夹「链接」或「ID」：');
+  const res = ui.prompt('Ange länk eller ID för målmappen:');
   if (res.getSelectedButton() !== ui.Button.OK) return;
 
   const id = res.getResponseText().trim()
-               .replace(/.*?folders\/([A-Za-z0-9_-]{10,}).*/, '$1'); // 允许整条 URL
+               .replace(/.*?folders\/([A-Za-z0-9_-]{10,}).*/, '$1'); // Tillåter hel URL
   try {
-    DriveApp.getFolderById(id);                           // 验证可访问
+    DriveApp.getFolderById(id);                           // Bekräfta åtkomst
     PropertiesService.getUserProperties().setProperty('DEST_FOLDER_ID', id);
-    ui.alert('已保存！之后都会写入此文件夹。');
+    ui.alert('Sparat! Från och med nu sparas filer i den här mappen.');
   } catch (e) {
-    ui.alert('无法读取该文件夹，请检查权限或 ID 是否正确。\n\n' + e.message);
+    ui.alert('Kunde inte öppna mappen. Kontrollera behörighet eller att ID är korrekt.\n\n' + e.message);
   }
 }
 
 function clearDestFolder() {
   PropertiesService.getUserProperties().deleteProperty('DEST_FOLDER_ID');
-  SpreadsheetApp.getUi().alert('已切换为「自己的 My Drive」根目录。');
+  SpreadsheetApp.getUi().alert('Återställt. Filer sparas nu i roten av din Drive.');
 }
 
-/*────────── ③ 主函数 ─────────────────────────────────*/
+/*────────── ③ Huvudfunktion ──────────────────────────*/
 function fixLinksAndCopyHeic() {
   const ui    = SpreadsheetApp.getUi();
   const sheet = SpreadsheetApp.getActiveSheet();
   const data  = sheet.getDataRange().getValues();
-  if (data.length < 2) return ui.alert('当前工作表没有数据！');
+  if (data.length < 2) return ui.alert('Inga data i det aktuella kalkylbladet.');
 
-  /* 找图片列 */
+  /* Hitta bildkolumn */
   const header = data[0].map(h => String(h).trim());
   const imgCol = header.findIndex(h => /images\/gallery|image|gallery|bild/i.test(h));
-  if (imgCol === -1) return ui.alert('未找到图片列！');
+  if (imgCol === -1) return ui.alert('Hittade ingen bildkolumn.');
 
   const idRX  = /(?:\/d\/|id=)([A-Za-z0-9_-]{10,})/;
-  const dest  = getDestFolder_();                         // ← 目标文件夹由用户属性决定
+  const dest  = getDestFolder_();                         // ← Målmapp styrs av användaregenskap
   const token = ScriptApp.getOAuthToken();
 
   let changedLinks = 0, copied = 0;
@@ -68,7 +68,7 @@ function fixLinksAndCopyHeic() {
     const cell = data[r][imgCol];
     if (typeof cell !== 'string') continue;
 
-    const parts = cell.split(/([|,])/);                   // 保留 | 或 , 分隔符
+    const parts = cell.split(/([|,])/);                   // Bevara | eller , som avgränsare
 
     for (let i = 0; i < parts.length; i++) {
       if (parts[i] === '|' || parts[i] === ',') continue;
@@ -81,7 +81,7 @@ function fixLinksAndCopyHeic() {
         const file = DriveApp.getFileById(fileId);
         const mime = file.getMimeType();
 
-        /* 若是 HEIC/HEIF → 生成新 JPG */
+        /* Om HEIC/HEIF → skapa ny JPG */
         if (/image\/hei[cf]/i.test(mime)) {
           const nameBase = file.getName().replace(/\.(hei[cf])$/i, '');
           const thumbUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w4000`;
@@ -99,14 +99,14 @@ function fixLinksAndCopyHeic() {
           parts[i]     = `https://drive.google.com/uc?export=download&id=${newId}`;
           copied++;
         }
-        /* 非 HEIC，仅把 preview 链接转 uc 直链 */
+        /* Ej HEIC – konvertera endast preview‑länkar till uc‑direktlänkar */
         else if (!/^https:\/\/drive\.google\.com\/uc\?/.test(parts[i])) {
           parts[i] = `https://drive.google.com/uc?export=download&id=${fileId}`;
         }
         changedLinks++;
 
       } catch (err) {
-        errors.push(`第 ${r + 1} 行（ID=${fileId}）：${err.message}`);
+        errors.push(`Rad ${r + 1} (ID=${fileId}): ${err.message}`);
       }
     }
     data[r][imgCol] = parts.join('');
@@ -114,10 +114,10 @@ function fixLinksAndCopyHeic() {
 
   sheet.getDataRange().setValues(data);
 
-  /* 结果弹窗 */
+  /* Resultatdialog */
   const showErr = errors.slice(0, 20).join('\n');
   ui.alert(
-    `完成！\n链接处理：${changedLinks} 条\nHEIC 生成新 JPG：${copied} 张` +
-    (errors.length ? `\n\n⚠ 错误 ${errors.length} 条：\n${showErr}` : '')
+    `Klart!\nLänkar behandlade: ${changedLinks}\nHEIC konverterade till nya JPG: ${copied}` +
+    (errors.length ? `\n\n⚠ Fel ${errors.length} st:\n${showErr}` : '')
   );
 }
